@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRAP | Carrito</title>
+    <link rel="stylesheet" href="../css/estilos.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <header class="header">
+        <div class="logo-area">
+            <img src="../assets/img/logo.png" class="logo">
+            <span class="marca">FRAP</span>
+        </div>
+
+        <nav class="nav-right">
+            <button onclick="window.location.href='index.html'">Inicio</button>
+            <button onclick="window.location.href='productos.html'">Productos</button>
+            <button id="modoToggle" class="modo-btn">Modo oscuro</button>
+        </nav>
+    </header>
+
+    <main class="carrito-container">
+
+        <h1>🛒 Carrito</h1>
+
+        <table class="carrito-tabla">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Imagen</th>
+                    <th>Cantidad</th>
+                    <th>Subtotal</th>
+                    <th>Quitar</th>
+                </tr>
+            </thead>
+
+            <tbody id="carritoBody">
+                <!-- Productos cargados con JS -->
+            </tbody>
+        </table>
+
+        <div class="carrito-total">
+            Total: $<span id="totalCarrito">0</span>
+        </div>
+
+        <button class="btn-finalizar" onclick="window.location.href='ticket.html'">
+            Finalizar compra
+        </button>
+
+    </main>
+
+    <script src="../js/modoOscuro.js"></script>
+    <script src="../js/carrito.js"></script>
+
+</body>
+</html>
