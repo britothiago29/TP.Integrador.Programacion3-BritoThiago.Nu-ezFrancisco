@@ -14,10 +14,10 @@ const Credenciales_admins = Sequelize.define('Credenciales_admins', {
     contraseña: {
         type: DataTypes.STRING,
         allowNull: false
-    }
-    },
+    }},
     {
-        tableName: 'Credenciales_admins'
+        tableName: 'Credenciales_admins',
+        timestamps: false
     }
 );
 

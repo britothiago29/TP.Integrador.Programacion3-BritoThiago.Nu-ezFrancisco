@@ -1,7 +1,7 @@
-const { Sequelize } = require('../db/database');
-const { DataTypes } = Sequelize;
+const sequelize = require('../db/database.js');
+const { DataTypes } = require('sequelize');
 
-const Producto = Sequelize.define('Producto', {
+const Producto = sequelize.define('Producto', {
     id_producto: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -42,8 +42,11 @@ const Producto = Sequelize.define('Producto', {
     fecha_modificacion: {
         type: DataTypes.DATE,
         allowNull: false,
-    }
-});
+    }},
+    {
+        tableName: 'productos',
+        timestamps: false
+    });
 
 
 module.exports = Producto;

@@ -2,6 +2,10 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
+app.use(express.json());
+
+const routerProductos = require('./backend/routers/routerProducto');
+
 const path = require('node:path');
 
 const ruta = path.resolve(__dirname, "public");//path.resolve(process.env.RUTA_CONTENTIDO_ESTATICO);
@@ -15,5 +19,7 @@ app.get('/bienvenida', (req, res) => {
 app.get("/", (req, res) => {
     res.send("Hello world");
 });
+
+app.use('/productos', routerProductos);
 
 app.listen(port, () => console.log(`App escuchando en puerto ${port}`));
