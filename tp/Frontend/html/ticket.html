@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRAP | Ticket</title>
+    <link rel="stylesheet" href="../css/estilos.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <header class="header">
+        <div class="logo-area">
+            <img src="../assets/img/logo.png" class="logo">
+            <span class="marca">FRAP</span>
+        </div>
+
+        <nav class="nav-right">
+            <button onclick="window.location.href='index.html'">Inicio</button>
+            <button onclick="window.location.href='productos.html'">Productos</button>
+            <button onclick="window.location.href='carrito.html'">Carrito</button>
+            <button id="modoToggle" class="modo-btn">Modo oscuro</button>
+        </nav>
+    </header>
+
+    <main class="ticket-container">
+
+        <h1>🧾 Ticket de compra</h1>
+
+        <div class="ticket-datos">
+            <label for="nombreCliente">Nombre del cliente:</label>
+            <input type="text" id="nombreCliente" placeholder="Ingresá tu nombre">
+            <button class="btn-guardar-nombre" onclick="guardarNombre()">Guardar</button>
+        </div>
+
+        <table class="ticket-tabla">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cant</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody id="ticketBody">
+                <!-- Cargado automáticamente -->
+            </tbody>
+        </table>
+
+        <div class="ticket-total">
+            Total: $<span id="totalTicket">0</span>
+        </div>
+
+        <button class="btn-volver" onclick="window.location.href='index.html'">
+            Volver al inicio
+        </button>
+
+    </main>
+
+    <script src="../js/modoOscuro.js"></script>
+    <script src="../js/ticket.js"></script>
+
+</body>
+</html>
