@@ -1,7 +1,7 @@
-const { Sequelize } = require('../db/database');
-const { DataTypes } = Sequelize;
+const sequelize = require('../db/database.js');
+const { DataTypes } = require('sequelize');
 
-const Venta = Sequelize.define('Venta', {
+const Venta = sequelize.define('Venta', {
     id_ticket: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -19,6 +19,11 @@ const Venta = Sequelize.define('Venta', {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false
     }
-});
+    }, 
+    {
+    tableName: 'ventas',
+    timestamps: false
+    }
+);
 
 module.exports = Venta;

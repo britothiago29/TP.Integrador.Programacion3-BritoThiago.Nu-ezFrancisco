@@ -1,7 +1,7 @@
-const { Sequelize } = require('../db/database');
-const { DataTypes } = Sequelize;
+const sequelize = require('../db/database');
+const { DataTypes } = require('sequelize');
 
-const Detalle_venta = Sequelize.define('Detalle_Venta', {
+const Detalle_venta = sequelize.define('Detalle_Venta', {
     id_detalle: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -33,7 +33,8 @@ const Detalle_venta = Sequelize.define('Detalle_Venta', {
     }
 }, 
     {
-        tableName: 'Detalle_Venta'
+        tableName: 'Detalle_Venta',
+        timestamps: false
     });
 
 
