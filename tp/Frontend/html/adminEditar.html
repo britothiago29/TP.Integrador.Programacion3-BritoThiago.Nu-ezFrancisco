@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRAP | Editar Producto</title>
+
+    <link rel="stylesheet" href="../css/estilos.css">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header class="header">
+        <div class="logo-area">
+            <img src="../assets/img/logo.png" class="logo">
+            <span class="marca">FRAP</span>
+        </div>
+        <nav class="nav-right">
+            <button onclick="window.location.href='adminDashboard.html'">Panel</button>
+            <button id="modoToggle" class="modo-btn">Modo oscuro</button>
+        </nav>
+    </header>
+
+    <main style="max-width: 800px; margin: 120px auto; padding: 0 20px;">
+
+        <h1 style="margin-bottom: 20px;">✏️ Editar producto</h1>
+
+        <form id="formEditar" style="display:flex; flex-direction:column; gap:20px;">
+
+            <label>Nombre del producto</label>
+            <input type="text" id="nombre">
+
+            <label>Precio</label>
+            <input type="number" id="precio">
+
+            <label>Categoría</label>
+            <select id="tipo">
+                <option value="zapatillas">Zapatillas</option>
+                <option value="ropa">Ropa</option>
+            </select>
+
+            <label>Imagen (URL o ruta)</label>
+            <input type="text" id="imagen">
+
+            <!-- Preview -->
+            <img id="preview" src="" style="display:none; width:200px; border-radius:12px;">
+
+            <label>
+                <input type="checkbox" id="activo">
+                Producto activo
+            </label>
+
+            <button style="padding:12px 25px; background:black; color:white; border:none; border-radius:10px; cursor:pointer; width:220px;">
+                Guardar cambios
+            </button>
+
+        </form>
+
+    </main>
+
+    <script src="../js/modoOscuro.js"></script>
+    <script src="../js/adminEditar.js"></script>
+
+</body>
+</html>

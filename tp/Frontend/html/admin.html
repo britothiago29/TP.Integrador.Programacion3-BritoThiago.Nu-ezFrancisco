@@ -1,34 +1,57 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FRAP | Admin Login</title>
-    <link rel="stylesheet" href="../css/estilos.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FRAP | Administrador</title>
+
+    <link rel="stylesheet" href="../css/estilos.css" />
 </head>
 
 <body>
 
+    <!-- NAVBAR UNIFICADO -->
+    <header class="header">
+        <div class="logo-area">
+            <img src="../assets/img/logo.png" class="logo">
+            <span class="marca">FRAP</span>
+        </div>
+        <nav class="nav-right">
+            <button onclick="window.location.href='index.html'">Inicio</button>
+            <button id="modoToggle" class="modo-btn">Modo oscuro</button>
+        </nav>
+    </header>
+
+    <!-- LOGIN ADMIN -->
     <div class="admin-login-container">
 
         <div class="admin-login-card">
-            <img src="../assets/imagenes/logo.png" class="admin-logo">
 
-            <h2>Acceso Administrador</h2>
+            <img src="../assets/img/logo.png" class="admin-logo">
 
-            <input type="email" id="adminEmail" placeholder="Correo electrónico">
-            <input type="password" id="adminPass" placeholder="Contraseña">
+            <h2>Panel Administrador</h2>
 
-            <button onclick="loginAdmin()">Ingresar</button>
+            <input type="email" id="adminEmail" placeholder="Correo electrónico" autocomplete="off">
+            <input type="password" id="adminPassword" placeholder="Contraseña">
 
-            <p class="admin-volver" onclick="window.location.href='bienvenida.html'">
+            <button id="btnLogin">Ingresar</button>
+
+            <!-- BOTÓN OBLIGATORIO DEL TP -->
+            <button id="btnAccesoRapido" style="margin-top: 15px; background: #444;">
+                Acceso rápido
+            </button>
+
+            <div class="admin-volver" onclick="window.location.href='index.html'">
                 ← Volver al inicio
-            </p>
+            </div>
         </div>
 
     </div>
 
     <script src="../js/modoOscuro.js"></script>
     <script src="../js/admin.js"></script>
+
 </body>
+
 </html>

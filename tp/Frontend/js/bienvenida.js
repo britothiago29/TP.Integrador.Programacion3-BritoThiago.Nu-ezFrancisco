@@ -15,6 +15,20 @@ let link = $("link");
 let input_nombre = $("input_nombre");
 let btn_continuar = $("btn_continuar");
 
+// =======================
+//   APLICAR MODO INICIAL
+// =======================
+
+// Si el usuario ya tenía modo oscuro guardado, lo aplicamos al cargar
+window.addEventListener("DOMContentLoaded", () => {
+    const modoGuardado = localStorage.getItem("modo"); // "dark" o "light"
+
+    if (modoGuardado === "dark") {
+        // Forzamos que el botón piense que está en modo "oscuro" para que cambie a claro
+        btn_modo.innerText = "Modo\noscuro";
+        cambiarModo();
+    }
+});
 
 // =======================
 //     CAMBIAR MODO 
@@ -22,12 +36,11 @@ let btn_continuar = $("btn_continuar");
 
 function cambiarModo() {
 
-    // Detectamos si el botón está en modo oscuro
-    let modoActual = btn_modo.innerText.replace(/\s+/g, "").toLowerCase(); // ej: "ModeOscuro"
+    let modoActual = btn_modo.innerText.replace(/\s+/g, "").toLowerCase(); // ej: "modooscuro"
 
-    if (modoActual === "modoopcuro" || modoActual === "modooscuro") {
-
-        // → Cambiar a MODO CLARO
+    // Si el botón dice "Modo oscuro" → vamos a pasar a oscuro
+    if (modoActual.includes("oscuro")) {
+        // → Cambiar a MODO CLARO (fondo oscuro)
         btn_modo.innerText = "Modo\nclaro";
 
         header.classList.replace("header_light", "header_dark");
@@ -38,11 +51,11 @@ function cambiarModo() {
         input.classList.replace("input_light", "input_dark");
         link.classList.replace("link_light", "link_dark");
 
-        // Cambiar logo
         logo.src = "../assets/imagenes/logo_frap_foscuro.png";
 
+        localStorage.setItem("modo", "dark");
     } else {
-        // → Cambiar a MODO OSCURO
+        // → Cambiar a MODO CLARO (fondo claro)
         btn_modo.innerText = "Modo\noscuro";
 
         header.classList.replace("header_dark", "header_light");
@@ -53,12 +66,11 @@ function cambiarModo() {
         input.classList.replace("input_dark", "input_light");
         link.classList.replace("link_dark", "link_light");
 
-        // Cambiar logo
         logo.src = "../assets/imagenes/logo_frap_fclaro.png";
+
+        localStorage.setItem("modo", "light");
     }
 }
-
-
 
 // =======================
 //     BOTÓN CONTINUAR
@@ -70,11 +82,11 @@ function continuar() {
 
     if (nombre !== "") {
 
+        // Guardamos el nombre para usarlo en ticket y otras pantallas
         localStorage.setItem("nombre_usuario", nombre);
 
-        // Cambia esta URL cuando tengas la pantalla principal
-        // window.location.href = "../html/index.html";
-        window.location.href = "../html/index.html";
+        // 👉 El flujo del TP va a productos, NO a index
+        window.location.href = "../html/productos.html";
 
     } else {
         alert("Para continuar debe ingresar un nombre.");

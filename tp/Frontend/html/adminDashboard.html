@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRAP | Panel Admin</title>
+    <link rel="stylesheet" href="../css/estilos.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <header class="header">
+        <div class="logo-area">
+            <img src="../assets/img/logo.png" class="logo">
+            <span class="marca">FRAP</span>
+        </div>
+
+        <nav class="nav-right">
+            <button onclick="window.location.href='index.html'">Inicio</button>
+            <button id="modoToggle" class="modo-btn">Modo oscuro</button>
+        </nav>
+    </header>
+
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main style="max-width: 1100px; margin: 120px auto; padding: 0 20px;">
+
+        <h1 style="margin-bottom: 20px;">📦 Panel de productos</h1>
+
+        <button 
+            onclick="window.location.href='adminAgregar.html'"
+            style="padding: 10px 20px; background:black; color:white; border:none; border-radius:10px; cursor:pointer; margin-bottom:20px;">
+            ➕ Agregar producto
+        </button>
+
+        <!-- TABLA DE PRODUCTOS -->
+        <table class="ticket-tabla" style="margin-top: 10px;">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Imagen</th>
+                    <th>Nombre</th>
+                    <th>Precio</th>
+                    <th>Tipo</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody id="tablaProductos">
+                <!-- JS carga los productos -->
+            </tbody>
+        </table>
+
+    </main>
+
+    <script src="../js/modoOscuro.js"></script>
+    <script src="../js/adminDashboard.js"></script>
+
+</body>
+</html>

@@ -24,15 +24,16 @@
         </nav>
     </header>
 
+    <!-- CONTENIDO PRINCIPAL -->
     <main class="ticket-container">
 
         <h1>🧾 Ticket de compra</h1>
 
-        <div class="ticket-datos">
-            <label for="nombreCliente">Nombre del cliente:</label>
-            <input type="text" id="nombreCliente" placeholder="Ingresá tu nombre">
-            <button class="btn-guardar-nombre" onclick="guardarNombre()">Guardar</button>
-        </div>
+        <p class="ticket-info">
+            Cliente: <strong id="nombreTicket"></strong><br>
+            Fecha: <span id="fechaTicket"></span><br>
+            Empresa: FRAP
+        </p>
 
         <table class="ticket-tabla">
             <thead>
@@ -42,18 +43,15 @@
                     <th>Subtotal</th>
                 </tr>
             </thead>
-            <tbody id="ticketBody">
-                <!-- Cargado automáticamente -->
-            </tbody>
+
+            <tbody id="ticketBody"></tbody>
         </table>
 
         <div class="ticket-total">
             Total: $<span id="totalTicket">0</span>
         </div>
 
-        <button class="btn-volver" onclick="window.location.href='index.html'">
-            Volver al inicio
-        </button>
+        <button id="volverBtn" class="btn-volver">Volver al inicio</button>
 
     </main>
 
