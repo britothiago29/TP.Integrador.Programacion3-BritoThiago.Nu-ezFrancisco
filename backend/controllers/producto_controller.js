@@ -1,7 +1,7 @@
-const { Sequelize } = require('../db/database.js');
+const { Sequelize } = require('../models/index.js').sequelize;
 const { DataTypes } = require('sequelize');
 
-const Producto = require('../models/model_producto');
+const Producto = require('../models/index.js').Producto;
 
 
 const ObtenerProductos = async (req, res) => { // Filtro para obtener productos desde el front

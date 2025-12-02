@@ -1,9 +1,9 @@
-const sequelize = require('../db/database.js');
+const sequelize = require('../models/index.js').sequelize;
 const { DataTypes } = require('sequelize');
 
-const Ticket = require('../models/model_ventas.js');
-const Detalle_venta = require('../models/model_detalleVenta.js');
-const Producto = require('../models/model_producto.js');
+const Ticket = require('../models/index.js').Ticket;
+const Detalle_venta = require('../models/index.js').Detalle_venta;
+const Producto = require('../models/index.js').Producto;
 
 const realizarVenta = async (req, res) => {
     try {

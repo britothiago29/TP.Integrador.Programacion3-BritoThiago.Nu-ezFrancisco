@@ -36,7 +36,7 @@ const Producto = sequelize.define('Producto', {
         allowNull: false,
         references: {
             model: 'Credenciales_admins',
-            key: 'id'
+            key: 'id_admin'
         }
     },
     fecha_modificacion: {

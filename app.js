@@ -4,6 +4,7 @@ const port = 3000;
 
 app.use(express.json());
 
+const sequelize = require('./backend/models/index').sequelize;
 const routerProductos = require('./backend/routers/routerProducto');
 const routerTicket = require('./backend/routers/routerTicket');
 
@@ -25,4 +26,15 @@ app.use('/productos', routerProductos);
 
 app.use('/ticket', routerTicket);
 
-app.listen(port, () => console.log(`App escuchando en puerto ${port}`));
+sequelize
+  .sync({ force: true }) // force -> true/false   alter -> true/false
+  .then(() => {
+    console.log("Conectando a la data base");
+  })
+  .then(() => {
+    app.listen(port, () => console.log(`App escuchando en puerto ${port}`));
+    })
+  .catch((error) => console.log({ error }));
+
+
+//app.listen(port, () => console.log(`App escuchando en puerto ${port}`));

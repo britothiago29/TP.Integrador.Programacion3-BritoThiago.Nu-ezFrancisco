@@ -1,7 +1,7 @@
-const { Sequelize } = require('../db/database');
+const { Sequelize } = require('../models/index').sequelize;
 const { DataTypes } = require('sequelize');
 
-const Producto = require('../models/model_producto');
+const Producto = require('../models/index').Producto;
 
 const GetAllProductos = async (req, res) => {
     console.log("Entrando a GetAllProductos");
