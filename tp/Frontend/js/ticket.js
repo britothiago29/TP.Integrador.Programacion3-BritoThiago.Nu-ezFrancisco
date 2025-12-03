@@ -1,21 +1,21 @@
 // =========================================
-// CONTROL DE ACCESO
+// VALIDACIÓN DE ACCESO
 // =========================================
 const nombreUsuario = localStorage.getItem("nombre_usuario");
+const idTicket = localStorage.getItem("id_ticket");
+
 if (!nombreUsuario) {
     window.location.href = "bienvenida.html";
 }
 
-const compraConfirmada = localStorage.getItem("compraConfirmada");
-if (!compraConfirmada) {
-    window.location.href = "carrito.html";
+if (!idTicket) {
+    alert("No se encontró un ticket válido.");
+    window.location.href = "index.html";
 }
 
 // =========================================
 // VARIABLES
 // =========================================
-let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-
 const ticketBody = document.getElementById("ticketBody");
 const totalTicket = document.getElementById("totalTicket");
 const spanNombre = document.getElementById("nombreTicket");
@@ -23,46 +23,54 @@ const spanFecha = document.getElementById("fechaTicket");
 const volverBtn = document.getElementById("volverBtn");
 
 // =========================================
-// RENDER DEL TICKET
+// CARGAR TICKET DESDE BACKEND
 // =========================================
-function cargarTicket() {
-    ticketBody.innerHTML = "";
-    let total = 0;
+async function cargarTicket() {
+    try {
+        const resp = await fetch("http://localhost:3000/ticket/descargar_ticket", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id_ticket: idTicket })
+        });
 
-    carrito.forEach(prod => {
-        const precio = Number(prod.precio) || 0;
-        const cantidad = Number(prod.cantidad) || 0;
-        const subtotal = precio * cantidad;
-        total += subtotal;
+        const data = await resp.json();
+        console.log("DEBUG ticket recibido:", data);
 
-        ticketBody.innerHTML += `
-            <tr>
-                <td>${prod.nombre}</td>
-                <td>${cantidad}</td>
-                <td>$${subtotal.toFixed(2)}</td>
-            </tr>
-        `;
-    });
+        if (!resp.ok) {
+            alert("Error obteniendo ticket");
+            return;
+        }
 
-    totalTicket.textContent = total.toFixed(2);
+        // Llenar datos
+        spanNombre.textContent = data.nombre_cliente;
+        spanFecha.textContent = new Date().toLocaleString("es-AR");
 
-    spanNombre.textContent = nombreUsuario;
+        ticketBody.innerHTML = "";
+        data.detalles.forEach(det => {
+            ticketBody.innerHTML += `
+                <tr>
+                    <td>${det.nombre}</td>
+                    <td>${det.cantidad}</td>
+                    <td>$${det.subtotal}</td>
+                </tr>
+            `;
+        });
 
-    const hoy = new Date();
-    spanFecha.textContent = hoy.toLocaleDateString("es-AR");
+        totalTicket.textContent = data.total;
+
+    } catch (error) {
+        console.error("Error cargando ticket:", error);
+        alert("No se pudo cargar el ticket.");
+    }
 }
 
+cargarTicket();
+
 // =========================================
-// BOTÓN "VOLVER AL INICIO"
+// BOTÓN VOLVER
 // =========================================
 volverBtn.addEventListener("click", () => {
-
-    // limpiar datos del autoservicio
-    localStorage.removeItem("carrito");
+    localStorage.removeItem("id_ticket");
     localStorage.removeItem("compraConfirmada");
-
     window.location.href = "index.html";
 });
-
-// Render inicial
-cargarTicket();

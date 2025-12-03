@@ -127,7 +127,7 @@ btnFinalizar.addEventListener("click", async () => {
             body: JSON.stringify(body)
         });
 
-        const data = await resp.text();
+        const data = await resp.json();
 
         document.body.innerHTML = data;
 
@@ -139,11 +139,12 @@ btnFinalizar.addEventListener("click", async () => {
         // Guardamos el id del ticket para el ticket.html
         localStorage.setItem("id_ticket", data.id_ticket);
 
-        // Marcamos que la compra se confirmó
-        localStorage.setItem("compraConfirmada", "true");
-
-        // Limpiar el carrito después de la compra
+           // Limpiar carrito
         localStorage.removeItem("carrito");
+
+        // Redirigir al ticket
+        window.location.href = "ticket.html"; 
+
 
     } catch (error) {
         console.error("Error conexión:", error);

@@ -42,6 +42,7 @@ const Producto = sequelize.define('Producto', {
     fecha_modificacion: {
         type: DataTypes.DATE,
         allowNull: false,
+        defaultValue: DataTypes.NOW
     }},
     {
         tableName: 'productos',
