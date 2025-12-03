@@ -86,7 +86,7 @@ function continuar() {
         localStorage.setItem("nombre_usuario", nombre);
 
         // 👉 El flujo del TP va a productos, NO a index
-        window.location.href = "../html/productos.html";
+        window.location.href = "../productos.html";
 
     } else {
         alert("Para continuar debe ingresar un nombre.");

@@ -1,146 +1,102 @@
-// =====================================================
-// CONTROL DE ACCESO
-// =====================================================
-const nombreUsuario = localStorage.getItem("nombre_usuario");
-if (!nombreUsuario) {
-    window.location.href = "bienvenida.html";
-}
-
-// =====================================================
-// PRODUCTOS — HARDCODEADOS POR AHORA
-// =====================================================
-// IMPORTANTE: Verificar que estas rutas EXISTEN realmente
-const productos = [
-    { id: 1, tipo: "zapatillas", nombre: "Nike Air Zoom", precio: 58000, imagen: "../assets/img/nike.png" },
-    { id: 2, tipo: "zapatillas", nombre: "Adidas Superstar", precio: 54000, imagen: "../assets/img/adidas.png" },
-    { id: 3, tipo: "ropa", nombre: "Remera Oversize Negra", precio: 18000, imagen: "../assets/img/remera.png" },
-    { id: 4, tipo: "ropa", nombre: "Buzo Hoodie Gris", precio: 32000, imagen: "../assets/img/buzo.png" }
-];
-
-
-// =====================================================
-// VARIABLES DOM
-// =====================================================
-const contenedor = document.getElementById("listaProductos");
+const contenedorProductos = document.querySelector(".productos-grid");
 const botonesCat = document.querySelectorAll(".cat-btn");
-const paginacionDiv = document.getElementById("paginacion");
 
-// FILTRO Y PAGINACIÓN
-let filtroActual = "todos";
+let productos = [];
 let paginaActual = 1;
-const productosPorPagina = 4;
+const productosPorPagina = 6;
+let filtroActual = "todos";
 
-// =====================================================
-// FILTRAR PRODUCTOS
-// =====================================================
-function obtenerFiltrados() {
-    if (filtroActual === "todos") return productos;
-    return productos.filter(p => p.tipo === filtroActual);
-}
+// ==============================================
+//  CARGAR PRODUCTOS DESDE EL BACKEND
+// ==============================================
+async function cargarProductos() {
+    let url = "http://localhost:3000/productos";
 
-// =====================================================
-// RENDER DE PRODUCTOS CON PAGINACIÓN
-// =====================================================
-function renderProductos() {
-    const filtrados = obtenerFiltrados();
-    const totalProductos = filtrados.length;
-    const totalPaginas = Math.ceil(totalProductos / productosPorPagina);
+    if (filtroActual === "zapatillas") {
+        url += "?categoria=1";
+    }
 
-    if (paginaActual > totalPaginas) paginaActual = totalPaginas;
+    if (filtroActual === "ropa") {
+        url += "?categoria=2";
+    }
 
-    const inicio = (paginaActual - 1) * productosPorPagina;
-    const pagina = filtrados.slice(inicio, inicio + productosPorPagina);
+    try {
+        const resp = await fetch(url);
+        productos = await resp.json();
+        renderProductos();
 
-    contenedor.innerHTML = "";
-
-    pagina.forEach(p => {
-        const card = document.createElement("div");
-        card.classList.add("card");
-
-        card.innerHTML = `
-            <img src="${p.imagen}" alt="${p.nombre}">
-            <h3>${p.nombre}</h3>
-            <p>$${p.precio.toLocaleString("es-AR")}</p>
-            <button onclick="agregarAlCarrito(${p.id})">Agregar al carrito</button>
-        `;
-
-        contenedor.appendChild(card);
-    });
-
-    renderPaginacion(totalPaginas);
-}
-
-// =====================================================
-// BOTONES DE PAGINACIÓN
-// =====================================================
-function renderPaginacion(totalPaginas) {
-    paginacionDiv.innerHTML = "";
-
-    for (let i = 1; i <= totalPaginas; i++) {
-        const btn = document.createElement("button");
-        btn.textContent = i;
-
-        if (i === paginaActual) btn.classList.add("pagina-activa");
-
-        btn.addEventListener("click", () => {
-            paginaActual = i;
-            renderProductos();
-        });
-
-        paginacionDiv.appendChild(btn);
+    } catch (err) {
+        console.log("Error cargando productos:", err);
     }
 }
 
-// =====================================================
-// EVENTOS DE CATEGORÍAS
-// =====================================================
+// ==============================================
+//  RENDER PRODUCTOS
+// ==============================================
+function renderProductos() {
+    contenedorProductos.innerHTML = "";
+
+    const inicio = (paginaActual - 1) * productosPorPagina;
+    const fin = inicio + productosPorPagina;
+
+    const pagina = productos.slice(inicio, fin);
+
+    pagina.forEach(prod => {
+        contenedorProductos.innerHTML += `
+            <div class="card">
+                <img src="${prod.imagen}" alt="${prod.nombre}">
+                <h3>${prod.nombre}</h3>
+                <p>$${prod.precio}</p>
+                <button onclick="agregarCarrito(${prod.id}, '${prod.nombre}', ${prod.precio}, '${prod.imagen}')">
+                    Agregar al carrito
+                </button>
+            </div>
+        `;
+    });
+}
+
+// ==============================================
+//  FILTRO DE CATEGORÍAS
+// ==============================================
 botonesCat.forEach(btn => {
     btn.addEventListener("click", () => {
         botonesCat.forEach(b => b.classList.remove("activo"));
         btn.classList.add("activo");
 
-        filtroActual = btn.dataset.cat; // "zapatillas", "ropa" o "todos"
+        filtroActual = btn.dataset.cat;
         paginaActual = 1;
 
-        renderProductos();
+        cargarProductos();
     });
 });
 
-// =====================================================
-// AGREGAR AL CARRITO (CORREGIDO Y SEGURO)
-// =====================================================
-function agregarAlCarrito(id) {
+// ==============================================
+//  AGREGAR AL CARRITO
+// ==============================================
+function agregarCarrito(id, nombre, precio, imagen) {
     let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
-    const prod = productos.find(p => p.id === id);
+    const existente = carrito.find(p => p.id === id);
 
-    if (!prod) {
-        console.error("ERROR: Producto no encontrado:", id);
-        return;
-    }
-
-    const existe = carrito.find(i => i.id === id);
-
-    if (existe) {
-        existe.cantidad++;
+    if (existente) {
+        existente.cantidad += 1;
     } else {
         carrito.push({
-            id: prod.id,
-            nombre: prod.nombre,
-            precio: prod.precio,
-            imagen: prod.imagen,
+            id,
+            nombre,
+            precio,
+            imagen,
             cantidad: 1
         });
     }
 
     localStorage.setItem("carrito", JSON.stringify(carrito));
-    alert("Producto agregado 🛒");
+    alert("Producto agregado");
 }
 
-window.agregarAlCarrito = agregarAlCarrito;
+window.agregarCarrito = agregarCarrito;
 
-// =====================================================
-// MOSTRAR TODOS MEZCLADOS AL COMENZAR
-// =====================================================
-filtroActual = "todos";
-renderProductos();
+// ==============================================
+//  CARGA INICIAL
+// ==============================================
+cargarProductos();
