@@ -96,21 +96,62 @@ function eliminarProducto(index) {
 // ===============================
 //  FINALIZAR COMPRA
 // ===============================
-btnFinalizar.addEventListener("click", () => {
+btnFinalizar.addEventListener("click", async () => {
     if (carrito.length === 0) {
         alert("No hay productos en el carrito.");
         return;
     }
 
     const confirmar = window.confirm("¿Desea confirmar la compra?");
+    if (!confirmar) return;
 
-    if (confirmar) {
+    const nombre_cliente = localStorage.getItem("nombre_usuario");
+
+    // Transformar el carrito al formato que necesita el backend
+    const productosBack = carrito.map(prod => ({
+        id_producto: prod.id,    // tu carrito usa prod.id
+        cantidad: prod.cantidad
+    }));
+
+    const body = {
+        nombre_cliente,
+        productos: productosBack
+    };
+
+    try {
+        const resp = await fetch("http://localhost:3000/confirmarventa", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+        });
+
+        const data = await resp.json();
+
+        if (!resp.ok) {
+            alert(data.error || "Error al registrar venta.");
+            return;
+        }
+
+        // Guardamos el id del ticket para el ticket.html
+        localStorage.setItem("id_ticket", data.id_ticket);
+
         // Marcamos que la compra se confirmó
         localStorage.setItem("compraConfirmada", "true");
-        // (más adelante acá haremos fetch al backend para registrar la venta)
+
+        // Limpiar el carrito después de la compra
+        localStorage.removeItem("carrito");
+
+        // Ir al ticket
         window.location.href = "ticket.html";
+
+    } catch (error) {
+        console.error("Error conexión:", error);
+        alert("Error de conexión con el servidor.");
     }
 });
+
 
 // Hacer funciones visibles para los onclick del HTML
 window.cambiarCantidad = cambiarCantidad;
