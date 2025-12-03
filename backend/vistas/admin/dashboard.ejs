@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRAP | Panel Admin</title>
+
+    <link rel="stylesheet" href="/public/css/estilos.css">
+</head>
+
+<body>
+
+<header class="header">
+    <div class="logo-area">
+        <img id="logoFrap" src="/public/assets/imagenes/logo_frap_fclaro.png" class="logo">
+        <span class="marca">FRAP</span>
+    </div>
+
+    <nav class="nav-right">
+        <button onclick="window.location.href='/'">Inicio</button>
+        <button id="modoToggle" class="modo-btn">Modo oscuro</button>
+    </nav>
+</header>
+
+<main style="max-width:1100px; margin:120px auto; padding:0 20px;">
+
+    <h1 style="margin-bottom:20px;">📦 Panel de productos</h1>
+
+    <button onclick="window.location.href='/panel/productos/crear'"
+        style="padding:10px 20px; background:black; color:white; border:none; border-radius:10px; cursor:pointer; margin-bottom:20px;">
+        ➕ Agregar producto
+    </button>
+
+    <table class="ticket-tabla" style="margin-top:10px;">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Imagen</th>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Tipo</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <% productos.forEach(p => { %>
+                <tr>
+                    <td><%= p.id_producto %></td>
+
+                    <td>
+                        <% if (p.imagen) { %>
+                            <img src="/public/uploads/<%= p.imagen %>" style="width:60px; border-radius:8px;">
+                        <% } else { %>
+                            <span>Sin imagen</span>
+                        <% } %>
+                    </td>
+
+                    <td><%= p.descripcion %></td>
+                    <td>$ <%= p.precio %></td>
+
+                    <td>
+                        <%= p.Tipo_Producto ? p.Tipo_Producto.descripcion : "Sin tipo" %>
+                    </td>
+
+                    <td>
+                        <% if (p.estado === true) { %>
+                            <span style="color:green;">Activo</span>
+                        <% } else { %>
+                            <span style="color:red;">Inactivo</span>
+                        <% } %>
+                    </td>
+
+                    <td>
+                        <form action="/panel/productos/editar/<%= p.id_producto %>" method="GET" style="display:inline;">
+                            <button>✏️ Editar</button>
+                        </form>
+
+                        <% if (p.estado === true) { %>
+                            <form action="/panel/productos/desactivar/<%= p.id_producto %>" method="POST" style="display:inline;">
+                                <button style="background:red;color:white;">🔒 Desactivar</button>
+                            </form>
+                        <% } else { %>
+                            <form action="/panel/productos/activar/<%= p.id_producto %>" method="POST" style="display:inline;">
+                                <button style="background:green;color:white;">🔓 Activar</button>
+                            </form>
+                        <% } %>
+                    </td>
+
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+
+</main>
+
+</body>
+</html>

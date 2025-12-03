@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FRAP | Administrador</title>
+
+    <!-- Ruta a tu carpeta pública -->
+    <link rel="stylesheet" href="/public/css/estilos.css" />
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <header class="header">
+        <div class="logo-area">
+            <img id="logoFrap" src="/public/assets/imagenes/logo_frap_fclaro.png" class="logo">
+        </div>
+        <nav class="nav-right">
+            <button onclick="window.location.href='/'">Inicio</button>
+            <button id="modoToggle" class="modo-btn">Modo oscuro</button>
+        </nav>
+    </header>
+
+    <!-- LOGIN ADMIN -->
+    <div class="admin-login-container">
+
+        <div class="admin-login-card">
+
+            <img src="/public/assets/imagenes/logo_frap_fclaro.png" class="admin-logo">
+
+            <h2>Panel Administrador</h2>
+
+            <% if (typeof error !== "undefined") { %>
+                <div style="color: red; margin-bottom: 10px;">
+                    <%= error %>
+                </div>
+            <% } %>
+
+            <!-- FORM LOGIN REAL -->
+            <form action="/panel/login" method="POST">
+                <input type="email" name="email" placeholder="Correo electrónico" autocomplete="off" required>
+                <input type="password" name="password" placeholder="Contraseña" required>
+
+                <button type="submit">Ingresar</button>
+            </form>
+
+            <!-- BOTÓN OBLIGATORIO DEL TP (ACCEDER AUTOMÁTICO) -->
+            <form action="/panel/login" method="POST" style="margin-top: 15px;">
+                <input type="hidden" name="email" value="admin@frap.com">
+                <input type="hidden" name="password" value="admin123">
+                <button style="background:#444; color:white;">Acceso rápido</button>
+            </form>
+
+            <div class="admin-volver" onclick="window.location.href='/'">
+                ← Volver al inicio
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="/public/js/modoOscuro.js"></script>
+</body>
+
+</html>

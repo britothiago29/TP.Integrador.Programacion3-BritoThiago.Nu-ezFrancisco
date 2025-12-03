@@ -33,7 +33,7 @@ const Producto = sequelize.define('Producto', {
     },
     id_admin: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
             model: 'Credenciales_admins',
             key: 'id_admin'
