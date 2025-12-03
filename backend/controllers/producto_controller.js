@@ -20,7 +20,7 @@ const ObtenerProductos = async (req, res) => { // Filtro para obtener productos 
 
             const productos = await Producto.findAll({ 
                 where, 
-                attributes: ['id_producto', 'precio', 'descripcion', 'imagen'] // Solo trae atributos necesarios en el front
+                attributes: ['id_producto', 'id_tipo_producto', 'precio', 'descripcion', 'imagen'] // Solo trae atributos necesarios en el front
             });
             res.json(productos);
 

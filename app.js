@@ -4,30 +4,28 @@ const port = 3000;
 
 app.use(express.json());
 
+const ejs = require('ejs');
 const sequelize = require('./backend/models/index').sequelize;
 const routerProductos = require('./backend/routers/routerProducto');
 const routerTicket = require('./backend/routers/routerTicket');
-
 const path = require('node:path');
 
-const ruta = path.resolve(__dirname, "public");//path.resolve(process.env.RUTA_CONTENTIDO_ESTATICO);
+
+const ruta = path.resolve(__dirname, "tp/Frontend");//path.resolve(process.env.RUTA_CONTENTIDO_ESTATICO);
+
+const rutaVistas = path.join(__dirname, 'backend/vistas');
+
+app.set("views", rutaVistas);
+app.set('view engine', 'ejs');
 
 app.use(express.static(ruta));
-
-app.get('/bienvenida', (req, res) => {
-    res.sendFile(path.join(ruta, 'bienvenida.html'));
-});// <---express.static(ruta) http://localhost:3000/public/rancor.jpg
-
-app.get("/", (req, res) => {
-    res.send("Hello world");
-});
 
 app.use('/productos', routerProductos);
 
 app.use('/ticket', routerTicket);
 
 sequelize
-  .sync({ force: true }) // force -> true/false   alter -> true/false
+  .sync()
   .then(() => {
     console.log("Conectando a la data base");
   })

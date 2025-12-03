@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRAP | Ticket</title>
+    <link rel="stylesheet" href="../../tp/Frontend/css/estilos.css">\
+    <style>
+        @media print {
+        .no-print {
+            display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <header class="header">
+        <div class="logo-area">
+            <img src="../../tp/Frontend/assets/imagenes/logo_frap_fclaro.png" class="logo">
+        </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="ticket-container">
+
+        <h1>Gracias por tu compra!</h1>
+
+        <p class="ticket-info">
+            Cliente: <strong id="nombreTicket"><%= nombre_cliente %></strong><br>
+            Fecha: <span id="fechaTicket"> <%= fecha_compra %> </span><br>
+        </p>
+
+        <table class="ticket-tabla">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+
+            <tbody id="ticketBody">
+                <% for( let index = 0; index < productos.length; index++ ) { %>
+                    <tr>
+                    <td><%= productos[index].descripcion %></td>
+                    <td><%= productos[index].cantidad %></td>
+                    <td><%= productos[index].subtotal %></td>
+                </tr>
+            <% } %>
+        </tbody>
+            </tbody>
+        </table>
+ 
+        <div class="ticket-total">
+            Total: $<span id="totalTicket"><%= total %></span>
+        </div>
+
+        <button id="volverBtn" class="btn-volver, no-print">Realizar otra compra</button>
+        <button id="descargarTicket" class="btn-volver, no-print">Descargar Ticket</button>
+
+    </main>
+
+    <script>
+        const btnVolver = document.getElementById("volverBtn");
+        const descargarTicket = document.getElementById("descargarTicket");
+
+        btnVolver.addEventListener("click", () => {
+            window.location.href = "/"; 
+        });
+
+        descargarTicket.addEventListener("click", async () => {
+            const Ticket = {
+                nombre_cliente:"<%= nombre_cliente %>",
+                fecha_compra:"<%= fecha_compra %>",
+                productos:"<%- JSON.stringify(productos) %>", 
+                total:"<%= total %>"
+            }
+
+            const response = await fetch('localhost:3000/ticket/', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ ticket: Ticket })
+            });
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "ticket.pdf";
+            a.click();
+            window.URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+</html>
