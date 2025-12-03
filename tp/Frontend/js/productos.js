@@ -44,10 +44,10 @@ function renderProductos() {
     pagina.forEach(prod => {
         contenedorProductos.innerHTML += `
             <div class="card">
-                <img src="${prod.imagen}" alt="${prod.nombre}">
-                <h3>${prod.nombre}</h3>
+                <img src="${prod.imagen}" alt="${prod.descripcion}">
+                <h3>${prod.descripcion}</h3>
                 <p>$${prod.precio}</p>
-                <button onclick="agregarCarrito(${prod.id}, '${prod.nombre}', ${prod.precio}, '${prod.imagen}')">
+                <button onclick="agregarCarrito(${prod.id_producto}, '${prod.descripcion}', ${prod.precio}, '${prod.imagen.trim()}')">
                     Agregar al carrito
                 </button>
             </div>

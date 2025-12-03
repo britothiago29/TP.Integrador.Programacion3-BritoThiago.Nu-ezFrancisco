@@ -59,7 +59,7 @@ const realizarVenta = async (req, res) => {
             objetoVista.productos.push(prodTicket);
         }
 
-
+        
         return res.status(200).render('TicketVista.ejs', {
             nombre_cliente:objetoVista.nombre_cliente,
             fecha_compra:objetoVista.fecha_compra,

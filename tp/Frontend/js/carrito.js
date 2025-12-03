@@ -119,7 +119,7 @@ btnFinalizar.addEventListener("click", async () => {
     };
 
     try {
-        const resp = await fetch("http://localhost:3000/confirmarventa", {
+        const resp = await fetch("http://localhost:3000/ticket/confirmarventa", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -127,7 +127,9 @@ btnFinalizar.addEventListener("click", async () => {
             body: JSON.stringify(body)
         });
 
-        const data = await resp.json();
+        const data = await resp.text();
+
+        document.body.innerHTML = data;
 
         if (!resp.ok) {
             alert(data.error || "Error al registrar venta.");
@@ -142,9 +144,6 @@ btnFinalizar.addEventListener("click", async () => {
 
         // Limpiar el carrito después de la compra
         localStorage.removeItem("carrito");
-
-        // Ir al ticket
-        window.location.href = "ticket.html";
 
     } catch (error) {
         console.error("Error conexión:", error);

@@ -1,9 +1,9 @@
-// === ACCESOS RÁPIDOS ===
 function $(id) {
     return document.getElementById(id);
 }
 
-let logo = $("logo");
+console.log("estoy aca")
+
 let header = $("header");
 let mid_container = $("mid_container");
 let btn_modo = $("btn_modo");
@@ -51,8 +51,6 @@ function cambiarModo() {
         input.classList.replace("input_light", "input_dark");
         link.classList.replace("link_light", "link_dark");
 
-        logo.src = "../assets/imagenes/logo_frap_foscuro.png";
-
         localStorage.setItem("modo", "dark");
     } else {
         // → Cambiar a MODO CLARO (fondo claro)
@@ -65,8 +63,6 @@ function cambiarModo() {
         bienvenida.classList.replace("bienvenida_dark", "bienvenida_light");
         input.classList.replace("input_dark", "input_light");
         link.classList.replace("link_dark", "link_light");
-
-        logo.src = "../assets/imagenes/logo_frap_fclaro.png";
 
         localStorage.setItem("modo", "light");
     }
@@ -86,7 +82,7 @@ function continuar() {
         localStorage.setItem("nombre_usuario", nombre);
 
         // 👉 El flujo del TP va a productos, NO a index
-        window.location.href = "../productos.html";
+        window.location.href = "./productos.html";
 
     } else {
         alert("Para continuar debe ingresar un nombre.");

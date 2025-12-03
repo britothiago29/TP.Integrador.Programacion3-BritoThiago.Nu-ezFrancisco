@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FRAP | Ticket</title>
-    <link rel="stylesheet" href="../../tp/Frontend/css/estilos.css">\
+    <link rel="stylesheet" href="../../tp/Frontend/css/estilos.css">
     <style>
         @media print {
         .no-print {
@@ -79,7 +79,7 @@
                 total:"<%= total %>"
             }
 
-            const response = await fetch('localhost:3000/ticket/', {
+            const response = await fetch('/ticket/descargar_ticket', {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

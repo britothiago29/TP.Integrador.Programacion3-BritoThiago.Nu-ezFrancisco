@@ -8,10 +8,10 @@ function actualizarLogo() {
 
     if (body.classList.contains("dark")) {
         // logo modo oscuro
-        logo.src = "../assets/imagenes/logo_frap_foscuro.png";
+        logo.src = "./assets/imagenes/logo_frap_foscuro.png";
     } else {
         // logo modo claro
-        logo.src = "../assets/imagenes/logo_frap_fclaro.png";
+        logo.src = "./assets/imagenes/logo_frap_fclaro.png";
     }
 }
 
