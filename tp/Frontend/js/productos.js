@@ -17,6 +17,7 @@ const productos = [
     { id: 4, tipo: "ropa", nombre: "Buzo Hoodie Gris", precio: 32000, imagen: "../assets/img/buzo.png" }
 ];
 
+
 // =====================================================
 // VARIABLES DOM
 // =====================================================
