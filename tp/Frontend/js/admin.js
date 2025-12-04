@@ -29,6 +29,7 @@ btnLogin.addEventListener("click", () => {
 
     // POR AHORA ES LOGIN FICTICIO
     // Cuando hagamos backend → reemplazamos este bloque por fetch()
+    /*
     if (email === "admin@frap.com" && pass === "admin123") {
         // guardamos sesión temporal
         localStorage.setItem("adminLogueado", "true");
@@ -36,4 +37,9 @@ btnLogin.addEventListener("click", () => {
     } else {
         alert("Credenciales incorrectas.");
     }
+    */
+
+
+    
+
 });

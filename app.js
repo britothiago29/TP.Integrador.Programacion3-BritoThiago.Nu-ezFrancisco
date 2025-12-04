@@ -49,7 +49,7 @@ app.use('/ticket', routerTicket);
 
 app.use('/panel', routerAdmin);
 
-app.use('/public', express.static(ruta));
+app.use('/', express.static(ruta));
 
 
 sequelize

@@ -1,12 +1,10 @@
 const bcrypt = require("bcryptjs");
+const sequelize = require('../models/index').sequelize;
 
 // MODELOS REALES
 const Producto = require("../models/model_producto");
 const TipoProducto = require("../models/model_tipoProducto");
 const Admin = require("../models/model_credencialesAdmins");
-
-console.log("ADMIN CONTROLLER CARGADO DESDE:", __filename);
-
 
 module.exports = {
 
