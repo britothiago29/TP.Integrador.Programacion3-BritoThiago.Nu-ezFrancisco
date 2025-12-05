@@ -720,3 +720,70 @@ body.dark .form-admin button {
     border-radius: 12px;
     display: none;
 }
+
+/* ============================================================
+   FIX DEFINITIVO — CARRITO Y TICKET EN MODO OSCURO
+============================================================ */
+
+/* CONTENEDORES */
+body.dark .carrito-container,
+body.dark .ticket-container {
+    background: transparent !important;
+}
+
+/* TABLA COMPLETA */
+body.dark .carrito-tabla,
+body.dark .ticket-tabla {
+    background: #222 !important;
+    box-shadow: 0 0 12px rgba(255,255,255,0.1) !important;
+    border-color: #444 !important;
+}
+
+/* ENCABEZADOS */
+body.dark .carrito-tabla th,
+body.dark .ticket-tabla th {
+    background: #333 !important;
+    border-bottom: 1px solid #555 !important;
+}
+
+/* CELDAS */
+body.dark .carrito-tabla td,
+body.dark .ticket-tabla td {
+    background: #222 !important;
+    color: white !important;
+    border-color: #444 !important;
+}
+
+/* IMÁGENES EN TABLA (para evitar fondo blanco visual) */
+body.dark .carrito-tabla img,
+body.dark .ticket-tabla img {
+    filter: brightness(0.9);
+}
+
+/* FILA HOVER */
+body.dark tr:hover {
+    background: #2c2c2c !important;
+}
+
+/* BOTÓN QUITAR PRODUCTO */
+body.dark .btn-eliminar {
+    background: #d9534f !important;
+    color: white !important;
+}
+
+/* BOTONES + / - */
+body.dark .cant-btn {
+    background: #fff !important;
+    color: #000 !important;
+}
+
+/* TEXTO TOTAL */
+body.dark .carrito-total,
+body.dark .ticket-total {
+    color: #fff !important;
+}
+
+/* TICKETS — INFO DEL CLIENTE */
+body.dark .ticket-info {
+    color: #ddd !important;
+}
