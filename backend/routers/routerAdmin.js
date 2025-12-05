@@ -8,6 +8,7 @@ const {
     mostrarLogin,
     procesarLogin,
     loginRapido,
+    crearUsuario,
     mostrarDashboard,
     mostrarFormularioAlta,
     crearProducto,
@@ -26,6 +27,9 @@ router.post('/login', procesarLogin);
 
 // Botón acceso rápido
 router.get('/login/fast', loginRapido);
+
+// Crear usuario admin con endpoint 
+router.post('/crear-usuario', crearUsuario);
 
 // Dashboard
 router.get('/dashboard', isAdmin, mostrarDashboard);

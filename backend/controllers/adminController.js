@@ -22,9 +22,13 @@ const procesarLogin = async (req, res) => {
             return res.render('login', { error: "Credenciales inválidas" });
         }
 
+        const hashedPass = await bcrypt.hash(password, 15);
+
         // 🔹 Si ya guardás la contraseña encriptada en la BD:
         const ok = await bcrypt.compare(password, admin.contraseña);
         console.log("Email ingresado:", email);
+        console.log("Contraseña Ingresada:", password);
+        console.log("Contraseña ingresada hasheada:", hashedPass);
         console.log("Admin encontrado en BD:", admin ? admin.email : "null");
         console.log("Contraseña en BD:", admin ? admin.contraseña : "null");
 
@@ -52,26 +56,26 @@ const procesarLogin = async (req, res) => {
 };
 
 // GET /admin/login/fast → botón acceso rápido
-// const loginRapido = async (req, res) => {
-//     try {
-//         // Tomamos el PRIMER admin de la tabla como acceso rápido
-//         const admin = await Credenciales_admins.findOne();
+const loginRapido = async (req, res) => {
+    try {
+        // Tomamos el PRIMER admin de la tabla como acceso rápido
+        const admin = await Credenciales_admins.findOne();
 
-//         if (!admin) {
-//             return res.send("No hay admins cargados en la BD.");
-//         }
+        if (!admin) {
+            return res.send("No hay admins cargados en la BD.");
+        }
 
-//         req.session.admin = {
-//             id: admin.id_admin,
-//             email: admin.email
-//         };
+        req.session.admin = {
+            id: admin.id_admin,
+            email: admin.email
+        };
 
-//         return res.redirect('/admin/dashboard');
-//     } catch (error) {
-//         console.error("Error en login rápido:", error);
-//         return res.send("Error en login rápido");
-//     }
-// };
+        return res.redirect('/admin/dashboard');
+    } catch (error) {
+        console.error("Error en login rápido:", error);
+        return res.send("Error en login rápido");
+    }
+};
 
 // GET /admin/dashboard
 const mostrarDashboard = async (req, res) => {
@@ -115,6 +119,28 @@ const mostrarFormularioAlta = async (req, res) => {
         accion: 'alta'
     });
 };
+
+
+// POST /admin/crear-usuario
+const crearUsuario = async (req, res) => {
+    try {
+        const { email, pass } = req.body;
+        const saltRounds = 15;
+
+        if (email && pass) {
+            const hashedPass = await bcrypt.hash(pass, saltRounds);
+            console.log("------------- guia --------------")
+            console.log(hashedPass);
+            const nuevoUsuario = await Credenciales_admins.create({email:email, contraseña:hashedPass});
+            res.send(nuevoUsuario);
+        }
+
+    } catch (error) {
+        console.error("Ocurrió un error creando el usuario:", error);
+        return res.send("Error creando el usuario");
+    }
+}
+
 
 // POST /admin/productos/nuevo
 const crearProducto = async (req, res) => {
@@ -244,6 +270,7 @@ module.exports = {
     mostrarLogin,
     procesarLogin,
     loginRapido,
+    crearUsuario,
     mostrarDashboard,
     mostrarFormularioAlta,
     crearProducto,
