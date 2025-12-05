@@ -1,7 +1,9 @@
 // backend/routers/routerAdmin.js
 console.log(">>> ROUTER ADMIN CARGADO OK:", __filename);
 
+const path = require('path');
 const express = require('express');
+const multer = require('multer');
 const router = express.Router();
 
 const {
@@ -34,13 +36,17 @@ router.post('/crear-usuario', crearUsuario);
 // Dashboard
 router.get('/dashboard', isAdmin, mostrarDashboard);
 
+// Definicion de ruta de imagenes
+const uploadPath = path.join(__dirname, '../../tp/frontend/uploads'); 
+const upload = multer({ dest: uploadPath });
+
 // Alta
 router.get('/productos/nuevo', isAdmin, mostrarFormularioAlta);
-router.post('/productos/nuevo', isAdmin, crearProducto);
+router.post('/productos/nuevo', upload.single("imagen"),isAdmin, crearProducto);
 
 // Editar
 router.get('/productos/:id/editar', isAdmin, mostrarFormularioEditar);
-router.post('/productos/:id/editar', isAdmin, actualizarProducto);
+router.post('/productos/:id/editar', upload.single("imagen"), isAdmin, actualizarProducto);
 
 // Baja lógica / activar
 router.post('/productos/:id/desactivar', isAdmin, desactivarProducto);

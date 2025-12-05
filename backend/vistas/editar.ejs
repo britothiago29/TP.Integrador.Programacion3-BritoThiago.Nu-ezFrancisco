@@ -95,7 +95,7 @@
 
 <main class="form-producto-container">
     <form method="POST"
-          action="<%= accion === 'alta' ? '/admin/productos/nuevo' : '/admin/productos/' + producto.id_producto + '/editar' %>">
+          action="<%= accion === 'alta' ? '/admin/productos/nuevo' : '/admin/productos/' + producto.id_producto + '/editar' %>" enctype="multipart/form-data">
 
         <label>Descripción</label>
         <input type="text" name="descripcion" required
@@ -117,7 +117,7 @@
         </select>
 
         <label>Imagen (ruta)</label>
-        <input type="text" name="imagen" required
+        <input type="file" name="imagen" accept="image/*" required
             value="<%= producto ? producto.imagen : '' %>">
 
         <button type="submit">

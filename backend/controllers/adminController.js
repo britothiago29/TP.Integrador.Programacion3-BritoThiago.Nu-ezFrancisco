@@ -1,6 +1,8 @@
 // backend/controllers/adminController.js
 
+const path = require('path');
 const bcrypt = require('bcryptjs');
+const fs = require('fs');
 const { Producto, Tipo_producto, Credenciales_admins } = require("../models/index");
 
 // GET /admin/login
@@ -141,17 +143,41 @@ const crearUsuario = async (req, res) => {
     }
 }
 
+const guardarImagen = (file) => {
+    let ext = "";
+
+    if (file.mimetype === "image/jpeg") {
+        ext = "jpeg";
+    }
+    if (file.mimetype === "image/png") {
+        ext = "png";
+    }
+
+    const originalname = file.originalname.split(".")[0].replace(/\s/g, "-");
+    const nombreArchivo = `${originalname}_${Date.now()}.${ext}`;
+
+    const carpetaUpload = path.join(__dirname, '../../tp/frontend/uploads');
+    const newPath = path.join(carpetaUpload, nombreArchivo);
+
+    fs.renameSync(file.path, newPath);
+
+    return `http://localhost:3000/uploads/${nombreArchivo}`;
+}
+
 
 // POST /admin/productos/nuevo
 const crearProducto = async (req, res) => {
     try {
-        const { descripcion, precio, id_tipo_producto, imagen } = req.body;
+        const { descripcion, precio, id_tipo_producto } = req.body;
 
+        const rutaImagen = await guardarImagen(req.file);
+        console.log(rutaImagen);
+        
         await Producto.create({
             descripcion,
             precio,
             id_tipo_producto,
-            imagen,
+            imagen:rutaImagen,
             estado: true,          // activo por defecto
             id_admin: req.session.admin.id,
             fecha_modificacion: new Date()
@@ -193,14 +219,16 @@ const mostrarFormularioEditar = async (req, res) => {
 const actualizarProducto = async (req, res) => {
     try {
         const { id } = req.params;
-        const { descripcion, precio, id_tipo_producto, imagen } = req.body;
+        const { descripcion, precio, id_tipo_producto} = req.body;
+
+        const rutaImagen = await guardarImagen(req.file);
 
         await Producto.update(
             {
                 descripcion,
                 precio,
                 id_tipo_producto,
-                imagen,
+                imagen:rutaImagen,
                 id_admin: req.session.admin.id,
                 fecha_modificacion: new Date()
             },
