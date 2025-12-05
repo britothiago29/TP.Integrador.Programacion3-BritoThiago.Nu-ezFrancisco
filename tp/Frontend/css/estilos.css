@@ -327,6 +327,26 @@ body.dark .card button {
     margin: 20px 0;
 }
 
+.paginacion {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.pag-btn {
+    padding: 8px 12px;
+    margin: 3px;
+    border: 1px solid #555;
+    background: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.pag-btn.activo {
+    background: #222;
+    color: white;
+}
+
+
 
 
 /* ============================================================
