@@ -7,7 +7,7 @@ const sequelize = new Sequelize('db_proyecto', 'root', '',
     }
 );
 
-const testConnection = async () => {
+const testConexion = async () => {
     try {
         await sequelize.authenticate();
         console.log("Conexion a la base de datos establecida correctamente");
@@ -16,6 +16,6 @@ const testConnection = async () => {
     }
 }
 
-testConnection();
+testConexion();
 
 module.exports = sequelize;

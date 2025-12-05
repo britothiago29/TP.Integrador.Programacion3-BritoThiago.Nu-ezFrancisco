@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRAP | Bienvenido</title>
+
+    <link rel="stylesheet" href="./css/estilos.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR UNIFICADO -->
+    <header class="header">
+        <div class="logo-area">
+
+            <img src="./assets/imagenes/logo.png" class="logo">
+            <span class="marca">FRAP</span>
+        </div>
+
+        <nav class="nav-right">
+            <button id="modoToggle" class="modo-btn">Modo oscuro</button>
+        </nav>
+    </header>
+
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="inicio-container">
+
+        <h1 class="home-title">¡Bienvenido!</h1>
+        <p class="home-sub">Ingresa tu nombre para comenzar</p>
+
+        <!-- INPUT NOMBRE -->
+        <div style="margin-top: 40px;">
+            <input 
+                id="input_nombre" 
+                type="text" 
+                placeholder="Ingrese su nombre"
+                style="
+                    padding: 12px 18px;
+                    font-size: 16px;
+                    width: 280px;
+                    border-radius: 12px;
+                    border: 1px solid #aaa;
+                "
+            >
+
+            <button 
+                id="btn_continuar"
+                style="
+                    display:block;
+                    margin: 20px auto 0;
+                    padding: 12px 25px;
+                    font-size: 16px;
+                    border-radius: 12px;
+                    border: none;
+                    background:black;
+                    color:white;
+                    cursor:pointer;
+                "
+            >
+                Continuar
+            </button>
+        </div>
+
+        <!-- LINK ADMIN -->
+        <p style="margin-top: 25px;">
+            <a href="/admin/login" style="text-decoration: underline; cursor:pointer;">
+                Acceder como administrador
+            </a>
+        </p>
+
+    </main>
+
+    <script src="./js/modoOscuro.js"></script>
+    <script src="./js/bienvenida.js"></script>
+
+</body>
+</html>

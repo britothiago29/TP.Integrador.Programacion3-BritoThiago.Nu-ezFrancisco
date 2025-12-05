@@ -16,7 +16,7 @@ const Tipo_producto = sequelize.define(
   },
   {
     tableName: "Tipo_Producto",
-    timestamps: false   // ← ESTA LÍNEA ES LA CLAVE
+    timestamps: false   
   }
 );
 

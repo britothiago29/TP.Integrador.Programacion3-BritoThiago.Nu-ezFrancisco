@@ -1,5 +1,3 @@
-// backend/middlewares/isAdmin.js
-
 function isAdmin(req, res, next) {
     if (req.session && req.session.admin) {
         return next();

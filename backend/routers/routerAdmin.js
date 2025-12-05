@@ -37,7 +37,7 @@ router.post('/crear-usuario', crearUsuario);
 router.get('/dashboard', isAdmin, mostrarDashboard);
 
 // Definicion de ruta de imagenes
-const uploadPath = path.join(__dirname, '../../tp/frontend/uploads'); 
+const uploadPath = path.join(__dirname, '../../public/uploads'); 
 const upload = multer({ dest: uploadPath });
 
 // Alta

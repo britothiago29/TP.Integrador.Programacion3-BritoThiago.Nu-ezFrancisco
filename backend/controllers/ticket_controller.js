@@ -99,4 +99,3 @@ const descargarTicket = async (req, res) => {
 };
 
 module.exports = { realizarVenta, descargarTicket };
-

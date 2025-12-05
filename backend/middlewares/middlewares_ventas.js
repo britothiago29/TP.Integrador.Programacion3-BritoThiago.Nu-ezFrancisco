@@ -51,27 +51,5 @@ function validarBodyVenta() {
         }
     };
 }
-/*
-function parseProductos() {
-    return async (req, res, next) => {
-        try {
-            const body = req.body;
-            const productosParseados = [];
-
-            for (const prod of body.productos) {
-                const productoDB = await Producto.findOne({ where: {id_producto: prod.id_producto}, attributes: ['id_producto', 'precio', 'descripcion'] });
-
-                productoDB.cantidad = prod.cantidad;
-                productosParseados.push(productoDB);
-            }
-
-            req.body.productos = productosParseados;
-            
-            next();
-        } catch (error) {
-            return res.status(500).json({ message: 'Ocurrió un error' });
-        }
-    }
-}*/
 
 module.exports = { validarBodyVenta };

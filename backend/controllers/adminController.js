@@ -156,7 +156,7 @@ const guardarImagen = (file) => {
     const originalname = file.originalname.split(".")[0].replace(/\s/g, "-");
     const nombreArchivo = `${originalname}_${Date.now()}.${ext}`;
 
-    const carpetaUpload = path.join(__dirname, '../../tp/frontend/uploads');
+    const carpetaUpload = path.join(__dirname, '../../public/uploads');
     const newPath = path.join(carpetaUpload, nombreArchivo);
 
     fs.renameSync(file.path, newPath);
