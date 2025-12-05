@@ -1,172 +1,255 @@
-const bcrypt = require("bcryptjs");
-const sequelize = require('../models/index').sequelize;
+// backend/controllers/adminController.js
 
-// MODELOS REALES
-const Producto = require("../models/model_producto");
-const TipoProducto = require("../models/model_tipoProducto");
-const Admin = require("../models/model_credencialesAdmins");
+const bcrypt = require('bcryptjs');
+const { Producto, Tipo_producto, Credenciales_admins } = require("../models/index");
 
-module.exports = {
+// GET /admin/login
+const mostrarLogin = (req, res) => {
+    if (req.session.admin) {
+        return res.redirect('/admin/dashboard');
+    }
+    res.render('login', { error: null });
+};
 
-    // ======================================================
-    // LOGIN GET
-    // ======================================================
-    login: (req, res) => {
-        return res.render("admin/login");
-    },
-
-    // ======================================================
-    // LOGIN POST
-    // ======================================================
-    processLogin: async (req, res) => {
+// POST /admin/login
+const procesarLogin = async (req, res) => {
+    try {
         const { email, password } = req.body;
 
-        try {
-            const admin = await Admin.findOne({ where: { email } });
+        const admin = await Credenciales_admins.findOne({ where: { email } });
 
-            if (!admin) {
-                return res.render("admin/login", { error: "Usuario no encontrado" });
-            }
-
-            const passwordCorrecta = bcrypt.compareSync(password, admin.contraseña);
-
-            if (!passwordCorrecta) {
-                return res.render("admin/login", { error: "Contraseña incorrecta" });
-            }
-
-            // guardamos sesión
-            req.session.admin = {
-                id_admin: admin.id_admin,
-                email: admin.email
-            };
-
-            return res.redirect("/panel");
-
-        } catch (error) {
-            console.log("Error en login:", error);
-            return res.status(500).send("Error interno");
+        if (!admin) {
+            return res.render('login', { error: "Credenciales inválidas" });
         }
-    },
 
-    // ======================================================
-    // DASHBOARD – LISTADO DE PRODUCTOS
-    // ======================================================
-    dashboard: async (req, res) => {
-        try {
-            const productos = await Producto.findAll({
-                include: [{ 
-                    model: TipoProducto, 
-                    attributes: ["descripcion"] 
-                }]
-            });
+        // 🔹 Si ya guardás la contraseña encriptada en la BD:
+        const ok = await bcrypt.compare(password, admin.contraseña);
+        console.log("Email ingresado:", email);
+        console.log("Admin encontrado en BD:", admin ? admin.email : "null");
+        console.log("Contraseña en BD:", admin ? admin.contraseña : "null");
 
-            return res.render("admin/dashboard", { productos });
+        
 
-        } catch (error) {
-            console.log("Error dashboard:", error);
-            return res.status(500).send("Error al cargar dashboard");
+        // 🔹 Si todavía la tenés en texto plano, podés usar:
+        // const ok = (password === admin.contraseña);
+
+        if (!ok) {
+            return res.render('login', { error: "Credenciales inválidas" });
         }
-    },
 
-    // ======================================================
-    // FORMULARIO ALTA PRODUCTO
-    // ======================================================
-    createForm: async (req, res) => {
-        const tipos = await TipoProducto.findAll();
-        return res.render("admin/agregar", { tipos });
-    },
+        // Guardamos datos mínimos en session
+        req.session.admin = {
+            id: admin.id_admin,
+            email: admin.email
+        };
 
-    // ======================================================
-    // CREAR PRODUCTO POST (sin multer)
-    // ======================================================
-    create: async (req, res) => {
-        try {
-            await Producto.create({
-                descripcion: req.body.descripcion,
-                precio: req.body.precio,
-                id_tipo_producto: req.body.id_tipo_producto,
-                imagen: req.body.imagen,   // URL de imagen (sin multer)
-                estado: true,
-                id_admin: req.session.admin.id_admin,
-                fecha_modificacion: new Date()
-            });
+        return res.redirect('/admin/dashboard');
 
-            return res.redirect("/panel");
-
-        } catch (error) {
-            console.log("ERROR AL CREAR:", error);
-            return res.status(500).send("Error al crear producto");
-        }
-    },
-
-    // ======================================================
-    // FORMULARIO EDITAR PRODUCTO
-    // ======================================================
-    editForm: async (req, res) => {
-        try {
-            const producto = await Producto.findByPk(req.params.id);
-            const tipos = await TipoProducto.findAll();
-
-            if (!producto) return res.send("Producto no encontrado");
-
-            return res.render("admin/editar", { producto, tipos });
-
-        } catch (error) {
-            console.log("Error editForm:", error);
-            return res.status(500).send("Error interno");
-        }
-    },
-
-    // ======================================================
-    // EDITAR PRODUCTO POST (sin multer)
-    // ======================================================
-    update: async (req, res) => {
-        try {
-            const producto = await Producto.findByPk(req.params.id);
-
-            const nuevaImagen = req.body.imagen || producto.imagen;
-
-            await Producto.update(
-                {
-                    descripcion: req.body.descripcion,
-                    precio: req.body.precio,
-                    id_tipo_producto: req.body.id_tipo_producto,
-                    imagen: nuevaImagen,
-                    estado: req.body.estado === "on",
-                    fecha_modificacion: new Date()
-                },
-                { where: { id_producto: req.params.id } }
-            );
-
-            return res.redirect("/panel");
-
-        } catch (error) {
-            console.log("Error update:", error);
-            return res.status(500).send("Error al editar producto");
-        }
-    },
-
-    // ======================================================
-    // DESACTIVAR PRODUCTO
-    // ======================================================
-    deactivate: async (req, res) => {
-        await Producto.update(
-            { estado: false },
-            { where: { id_producto: req.params.id } }
-        );
-
-        return res.redirect("/panel");
-    },
-
-    // ======================================================
-    // ACTIVAR PRODUCTO
-    // ======================================================
-    activate: async (req, res) => {
-        await Producto.update(
-            { estado: true },
-            { where: { id_producto: req.params.id } }
-        );
-
-        return res.redirect("/panel");
+    } catch (error) {
+        console.error("Error en login admin:", error);
+        return res.render('login', { error: "Error del servidor" });
     }
+};
+
+// GET /admin/login/fast → botón acceso rápido
+// const loginRapido = async (req, res) => {
+//     try {
+//         // Tomamos el PRIMER admin de la tabla como acceso rápido
+//         const admin = await Credenciales_admins.findOne();
+
+//         if (!admin) {
+//             return res.send("No hay admins cargados en la BD.");
+//         }
+
+//         req.session.admin = {
+//             id: admin.id_admin,
+//             email: admin.email
+//         };
+
+//         return res.redirect('/admin/dashboard');
+//     } catch (error) {
+//         console.error("Error en login rápido:", error);
+//         return res.send("Error en login rápido");
+//     }
+// };
+
+// GET /admin/dashboard
+const mostrarDashboard = async (req, res) => {
+    try {
+        const productos = await Producto.findAll({
+            include: [{
+                model: Tipo_producto,
+                attributes: ["descripcion"]
+            }],
+            order: [['id_producto', 'ASC']]
+        });
+
+        const productosFront = productos.map(p => ({
+            id_producto: p.id_producto,
+            descripcion: p.descripcion,
+            precio: p.precio,
+            imagen: p.imagen,
+            estado: p.estado,
+            tipo: p.Tipo_producto ? p.Tipo_producto.descripcion : "",
+            id_tipo_producto: p.id_tipo_producto
+        }));
+
+        res.render('dashboard', {
+            admin: req.session.admin,
+            productos: productosFront
+        });
+
+    } catch (error) {
+        console.error("Error al mostrar dashboard:", error);
+        return res.send("Error al mostrar dashboard");
+    }
+};
+
+// GET /admin/productos/nuevo
+const mostrarFormularioAlta = async (req, res) => {
+    const tipos = await Tipo_producto.findAll();
+    res.render('editar', {
+        admin: req.session.admin,
+        producto: null,
+        tipos,
+        accion: 'alta'
+    });
+};
+
+// POST /admin/productos/nuevo
+const crearProducto = async (req, res) => {
+    try {
+        const { descripcion, precio, id_tipo_producto, imagen } = req.body;
+
+        await Producto.create({
+            descripcion,
+            precio,
+            id_tipo_producto,
+            imagen,
+            estado: true,          // activo por defecto
+            id_admin: req.session.admin.id,
+            fecha_modificacion: new Date()
+        });
+
+        return res.redirect('/admin/dashboard');
+
+    } catch (error) {
+        console.error("Error al crear producto:", error);
+        return res.send("Error al crear producto");
+    }
+};
+
+// GET /admin/productos/:id/editar
+const mostrarFormularioEditar = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const producto = await Producto.findByPk(id);
+        const tipos = await Tipo_producto.findAll();
+
+        if (!producto) {
+            return res.send("Producto no encontrado");
+        }
+
+        res.render('editar', {
+            admin: req.session.admin,
+            producto,
+            tipos,
+            accion: 'editar'
+        });
+
+    } catch (error) {
+        console.error("Error al mostrar formulario editar:", error);
+        return res.send("Error al mostrar formulario");
+    }
+};
+
+// POST /admin/productos/:id/editar
+const actualizarProducto = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { descripcion, precio, id_tipo_producto, imagen } = req.body;
+
+        await Producto.update(
+            {
+                descripcion,
+                precio,
+                id_tipo_producto,
+                imagen,
+                id_admin: req.session.admin.id,
+                fecha_modificacion: new Date()
+            },
+            { where: { id_producto: id } }
+        );
+
+        return res.redirect('/admin/dashboard');
+
+    } catch (error) {
+        console.error("Error al actualizar producto:", error);
+        return res.send("Error al actualizar producto");
+    }
+};
+
+// POST /admin/productos/:id/desactivar
+const desactivarProducto = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        await Producto.update(
+            {
+                estado: false,
+                id_admin: req.session.admin.id,
+                fecha_modificacion: new Date()
+            },
+            { where: { id_producto: id } }
+        );
+
+        return res.redirect('/admin/dashboard');
+
+    } catch (error) {
+        console.error("Error al desactivar producto:", error);
+        return res.send("Error al desactivar producto");
+    }
+};
+
+// POST /admin/productos/:id/activar
+const activarProducto = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        await Producto.update(
+            {
+                estado: true,
+                id_admin: req.session.admin.id,
+                fecha_modificacion: new Date()
+            },
+            { where: { id_producto: id } }
+        );
+
+        return res.redirect('/admin/dashboard');
+
+    } catch (error) {
+        console.error("Error al activar producto:", error);
+        return res.send("Error al activar producto");
+    }
+};
+
+// POST /admin/logout
+const logout = (req, res) => {
+    req.session.destroy(() => {
+        res.redirect('/admin/login');
+    });
+};
+
+module.exports = {
+    mostrarLogin,
+    procesarLogin,
+    loginRapido,
+    mostrarDashboard,
+    mostrarFormularioAlta,
+    crearProducto,
+    mostrarFormularioEditar,
+    actualizarProducto,
+    desactivarProducto,
+    activarProducto,
+    logout
 };

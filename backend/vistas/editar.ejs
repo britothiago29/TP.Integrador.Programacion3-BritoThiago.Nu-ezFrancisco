@@ -2,67 +2,53 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>FRAP | Editar Producto</title>
-    <link rel="stylesheet" href="/public/css/estilos.css">
+    <title>FRAP | <%= accion === 'alta' ? 'Alta' : 'Editar' %> producto</title>
+    <link rel="stylesheet" href="/css/estilos.css">
 </head>
-
-<body>
-
+<body class="light">
 <header class="header">
     <div class="logo-area">
-        <img id="logoFrap" src="/public/assets/imagenes/logo_frap_fclaro.png" class="logo">
+        <img id="logoFrap" src="/assets/imagenes/logo_frap_fclaro.png" class="logo">
     </div>
-    <nav class="nav-right">
-        <button onclick="window.location.href='/panel'">Panel</button>
-        <button id="modoToggle" class="modo-btn">Modo oscuro</button>
-    </nav>
+    <div class="mid_container_light">
+        <h3><%= accion === 'alta' ? 'Alta de producto' : 'Editar producto' %></h3>
+        <h4><%= admin ? admin.email : '' %></h4>
+    </div>
 </header>
 
-<main style="max-width:800px; margin:120px auto; padding:0 20px;">
+<main class="form-producto-container">
+    <form method="POST"
+          action="<%= accion === 'alta' ? '/admin/productos/nuevo' : '/admin/productos/' + producto.id_producto + '/editar' %>">
 
-    <h1>✏️ Editar producto</h1>
-
-    <form action="/panel/productos/editar/<%= producto.id_producto %>" method="POST" enctype="multipart/form-data"
-          style="display:flex; flex-direction:column; gap:20px;">
-
-        <label>Nombre</label>
-        <input type="text" name="descripcion" value="<%= producto.descripcion %>" required>
+        <label>Descripción</label>
+        <input type="text" name="descripcion" required
+               value="<%= producto ? producto.descripcion : '' %>">
 
         <label>Precio</label>
-        <input type="number" name="precio" value="<%= producto.precio %>" required>
+        <input type="number" step="0.01" name="precio" required
+               value="<%= producto ? producto.precio : '' %>">
 
-        <label>Categoría</label>
-        <select name="id_tipo_producto">
+        <label>Tipo de producto</label>
+        <select name="id_tipo_producto" required>
+            <option value="">Seleccione...</option>
             <% tipos.forEach(t => { %>
-                <option value="<%= t.id_tipo_producto %>" <%= t.id_tipo_producto === producto.id_tipo_producto ? "selected" : "" %>>
+                <option value="<%= t.id %>"
+                    <%= producto && producto.id_tipo_producto === t.id ? 'selected' : '' %>>
                     <%= t.descripcion %>
                 </option>
             <% }) %>
         </select>
 
-        <label>Imagen actual</label>
-        <% if (producto.imagen) { %>
-            <img src="/public/uploads/<%= producto.imagen %>" width="120" style="border-radius:12px;">
-        <% } %>
+        <label>Imagen (ruta)</label>
+        <input type="text" name="imagen" required
+            value="<%= producto ? producto.imagen : '' %>">
 
-        <label>Cambiar imagen</label>
-        <input type="file" name="imagen">
-
-        <label>
-            <input type="checkbox" name="estado" <%= producto.estado ? "checked" : "" %>>
-            Producto activo
-        </label>
-
-        <button type="submit"
-            style="padding:12px 25px; background:black; color:white; border:none; border-radius:10px; cursor:pointer; width:220px;">
-            Guardar cambios
+        <button type="submit">
+            <%= accion === 'alta' ? 'Agregar' : 'Guardar cambios' %>
         </button>
-
     </form>
 
+    <a href="/admin/dashboard">Volver al dashboard</a>
 </main>
-
-<script src="/public/js/modoOscuro.js"></script>
-
 </body>
 </html>

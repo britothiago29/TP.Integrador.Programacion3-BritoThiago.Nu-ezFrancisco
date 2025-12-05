@@ -1,67 +1,163 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FRAP | Administrador</title>
+    <meta charset="UTF-8">
+    <title>FRAP | Login admin</title>
+    <link rel="stylesheet" href="/css/estilos.css">
+    <style>
+/* CONTENEDOR PRINCIPAL */
+.login-admin-container {
+    max-width: 420px;
+    margin: 60px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 0 12px rgba(0,0,0,0.15);
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
 
-    <!-- Ruta a tu carpeta pública -->
-    <link rel="stylesheet" href="/public/css/estilos.css" />
+/* TÍTULO */
+.login-admin-container h2 {
+    font-size: 26px;
+    margin-bottom: 15px;
+}
+
+/* MENSAJE DE ERROR */
+.error {
+    background: #ffdddd;
+    color: #a94442;
+    padding: 10px;
+    border-left: 4px solid #d9534f;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    text-align: left;
+}
+
+/* FORMULARIO LOGIN */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.login-form label {
+    font-size: 14px;
+    margin-bottom: 4px;
+    font-weight: bold;
+}
+
+.login-form input {
+    padding: 10px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    transition: .2s;
+}
+
+.login-form input:focus {
+    outline: none;
+    border-color: #222;
+}
+
+/* BOTÓN PRINCIPAL */
+.login-form button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background: #222;
+    border: none;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.login-form button:hover {
+    background: #444;
+}
+
+/* ACCESO RÁPIDO */
+.login-fast-form button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 12px;
+    background: #3a87ad;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.login-fast-form button:hover {
+    background: #337ab7;
+}
+
+/* LINK VOLVER */
+.login-admin-container a {
+    display: inline-block;
+    margin-top: 15px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+}
+
+.login-admin-container a:hover {
+    text-decoration: underline;
+}
+
+/* RESPONSIVE */
+@media (max-width: 480px) {
+    .login-admin-container {
+        max-width: 90%;
+        padding: 20px;
+    }
+
+    .login-admin-container h2 {
+        font-size: 22px;
+    }
+}
+</style>
+
 </head>
-
-<body>
-
-    <!-- NAVBAR -->
-    <header class="header">
-        <div class="logo-area">
-            <img id="logoFrap" src="/public/assets/imagenes/logo_frap_fclaro.png" class="logo">
-        </div>
-        <nav class="nav-right">
-            <button onclick="window.location.href='/'">Inicio</button>
-            <button id="modoToggle" class="modo-btn">Modo oscuro</button>
-        </nav>
-    </header>
-
-    <!-- LOGIN ADMIN -->
-    <div class="admin-login-container">
-
-        <div class="admin-login-card">
-
-            <img src="/public/assets/imagenes/logo_frap_fclaro.png" class="admin-logo">
-
-            <h2>Panel Administrador</h2>
-
-            <% if (typeof error !== "undefined") { %>
-                <div style="color: red; margin-bottom: 10px;">
-                    <%= error %>
-                </div>
-            <% } %>
-
-            <!-- FORM LOGIN REAL -->
-            <form action="/panel/login" method="POST">
-                <input type="email" name="email" placeholder="Correo electrónico" autocomplete="off" required>
-                <input type="password" name="password" placeholder="Contraseña" required>
-
-                <button type="submit">Ingresar</button>
-            </form>
-
-            <!-- BOTÓN OBLIGATORIO DEL TP (ACCEDER AUTOMÁTICO) -->
-            <form action="/panel/login" method="POST" style="margin-top: 15px;">
-                <input type="hidden" name="email" value="admin@frap.com">
-                <input type="hidden" name="password" value="admin123">
-                <button style="background:#444; color:white;">Acceso rápido</button>
-            </form>
-
-            <div class="admin-volver" onclick="window.location.href='/'">
-                ← Volver al inicio
-            </div>
-
-        </div>
-
+<body class="light">
+<header class="header">
+    <div class="logo-area">
+        <img id="logoFrap" src="/assets/imagenes/logo_frap_fclaro.png" class="logo">
     </div>
+    <div class="mid_container_light">
+        <h3>TP Integrador - Panel Admin</h3>
+        <h4>Francisco Núñez Tosi - Thiago Brito</h4>
+    </div>
+</header>
 
-    <script src="/public/js/modoOscuro.js"></script>
+<main class="login-admin-container">
+    <h2>Login administrador</h2>
+
+    <% if (error) { %>
+        <p class="error"><%= error %></p>
+    <% } %>
+
+    <form method="POST" action="/admin/login" class="login-form">
+        <label>Email</label>
+        <input type="email" name="email" required>
+
+        <label>Contraseña</label>
+        <input type="password" name="password" required>
+
+        <button type="submit">Ingresar</button>
+    </form>
+
+    <form method="GET" action="/admin/login/fast" class="login-fast-form">
+        <button type="submit">Acceso rápido</button>
+    </form>
+
+    <a href="/html/bienvenida.html">Volver a la app</a>
+</main>
 </body>
-
 </html>

@@ -1,12 +1,10 @@
-console.log("EL MIDDLEWARE isAdmin FUE CARGADO");
+// backend/middlewares/isAdmin.js
 
-module.exports = (req, res, next) => {
-
-
-    // Si NO hay admin en sesión → redirigir al login
-    if (!req.session || !req.session.admin) {
-        return res.redirect("/panel/login");
+function isAdmin(req, res, next) {
+    if (req.session && req.session.admin) {
+        return next();
     }
+    return res.redirect('/admin/login');
+}
 
-    next();
-};
+module.exports = isAdmin;

@@ -34,8 +34,6 @@ app.use(session({
 
 
 
-
-
 const ruta = path.resolve(__dirname, "tp/Frontend");//path.resolve(process.env.RUTA_CONTENTIDO_ESTATICO);
 
 const rutaVistas = path.join(__dirname, 'backend/vistas');
@@ -47,7 +45,7 @@ app.use('/productos', routerProductos);
 
 app.use('/ticket', routerTicket);
 
-app.use('/panel', routerAdmin);
+app.use('/admin', routerAdmin);
 
 app.use('/', express.static(ruta));
 

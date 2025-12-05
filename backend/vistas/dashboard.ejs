@@ -2,98 +2,187 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FRAP | Panel Admin</title>
+    <title>FRAP | Dashboard</title>
+    <link rel="stylesheet" href="/css/estilos.css">
+    <style>/* CONTENEDOR PRINCIPAL */
+.dashboard-container {
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 20px;
+    border-radius: 15px;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+    font-family: Arial, sans-serif;
+}
 
-    <link rel="stylesheet" href="/public/css/estilos.css">
+/* TÍTULO */
+.dashboard-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 26px;
+}
+
+/* BOTÓN “AGREGAR PRODUCTO” */
+.btn {
+    display: inline-block;
+    padding: 10px 18px;
+    background: #222;
+    color: #fff;
+    border-radius: 8px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.btn:hover {
+    background: #444;
+}
+
+/* TABLA GENERAL */
+.tabla-productos {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 15px;
+}
+
+.tabla-productos thead {
+    background: #222;
+    color: white;
+}
+
+.tabla-productos th,
+.tabla-productos td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.tabla-productos tbody tr:hover {
+    background-color: #f2f2f2;
+}
+
+/* FILA DE PRODUCTO INACTIVO */
+.inactivo {
+    background: #ffe6e6 !important;
+}
+
+/* ACCIONES */
+.tabla-productos a,
+.tabla-productos button {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+    margin: 2px;
+    display: inline-block;
+}
+
+/* EDITAR */
+.tabla-productos a {
+    background: #f0ad4e;
+    color: white;
+}
+
+/* DESACTIVAR */
+.tabla-productos button {
+    background: #d9534f;
+    color: white;
+}
+
+/* ACTIVAR */
+.tabla-productos button[type="submit"]:not(.delete) {
+    background: #5cb85c !important;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 10px;
+    }
+
+    .tabla-productos th,
+    .tabla-productos td {
+        padding: 8px;
+        font-size: 13px;
+    }
+
+    .btn {
+        padding: 8px 14px;
+        font-size: 14px;
+    }
+}
+</style>
 </head>
-
-<body>
-
+<body class="light">
 <header class="header">
     <div class="logo-area">
-        <img id="logoFrap" src="/public/assets/imagenes/logo_frap_fclaro.png" class="logo">
-        <span class="marca">FRAP</span>
+        <img id="logoFrap" src="/assets/imagenes/logo_frap_fclaro.png" class="logo">
     </div>
-
+    <div class="mid_container_light">
+        <h3>Panel administrador</h3>
+        <h4><%= admin ? admin.email : '' %></h4>
+    </div>
     <nav class="nav-right">
-        <button onclick="window.location.href='/'">Inicio</button>
-        <button id="modoToggle" class="modo-btn">Modo oscuro</button>
+        <a href="/html/bienvenida.html">Ir a cliente</a>
+        <form method="POST" action="/admin/logout" style="display:inline;">
+            <button type="submit">Cerrar sesión</button>
+        </form>
     </nav>
 </header>
 
-<main style="max-width:1100px; margin:120px auto; padding:0 20px;">
+<main class="dashboard-container">
+    <h2>Productos</h2>
 
-    <h1 style="margin-bottom:20px;">📦 Panel de productos</h1>
+    <a href="/admin/productos/nuevo" class="btn">Agregar producto</a>
 
-    <button onclick="window.location.href='/panel/productos/crear'"
-        style="padding:10px 20px; background:black; color:white; border:none; border-radius:10px; cursor:pointer; margin-bottom:20px;">
-        ➕ Agregar producto
-    </button>
-
-    <table class="ticket-tabla" style="margin-top:10px;">
+    <table class="tabla-productos">
         <thead>
-            <tr>
-                <th>ID</th>
-                <th>Imagen</th>
-                <th>Nombre</th>
-                <th>Precio</th>
-                <th>Tipo</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
+        <tr>
+            <th>ID</th>
+            <th>Tipo</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Imagen</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
         </thead>
-
         <tbody>
-            <% productos.forEach(p => { %>
-                <tr>
-                    <td><%= p.id_producto %></td>
+        <% productos.forEach(p => { %>
+            <tr class="<%= p.estado ? '' : 'inactivo' %>">
+                <td><%= p.id_producto %></td>
+                <td><%= p.tipo %></td>
+                <td><%= p.descripcion %></td>
+                <td>$<%= p.precio %></td>
+                <td><%= p.imagen %></td>
+                <td><%= p.estado ? 'Activo' : 'Inactivo' %></td>
+                <td>
+                    <a href="/admin/productos/<%= p.id_producto %>/editar">Editar</a>
 
-                    <td>
-                        <% if (p.imagen) { %>
-                            <img src="/public/uploads/<%= p.imagen %>" style="width:60px; border-radius:8px;">
-                        <% } else { %>
-                            <span>Sin imagen</span>
-                        <% } %>
-                    </td>
-
-                    <td><%= p.descripcion %></td>
-                    <td>$ <%= p.precio %></td>
-
-                    <td>
-                        <%= p.Tipo_Producto ? p.Tipo_Producto.descripcion : "Sin tipo" %>
-                    </td>
-
-                    <td>
-                        <% if (p.estado === true) { %>
-                            <span style="color:green;">Activo</span>
-                        <% } else { %>
-                            <span style="color:red;">Inactivo</span>
-                        <% } %>
-                    </td>
-
-                    <td>
-                        <form action="/panel/productos/editar/<%= p.id_producto %>" method="GET" style="display:inline;">
-                            <button>✏️ Editar</button>
+                    <% if (p.estado) { %>
+                        <form method="POST"
+                              action="/admin/productos/<%= p.id_producto %>/desactivar"
+                              style="display:inline;"
+                              onsubmit="return confirm('¿Seguro que deseas desactivar este producto?');">
+                            <button type="submit">Desactivar</button>
                         </form>
-
-                        <% if (p.estado === true) { %>
-                            <form action="/panel/productos/desactivar/<%= p.id_producto %>" method="POST" style="display:inline;">
-                                <button style="background:red;color:white;">🔒 Desactivar</button>
-                            </form>
-                        <% } else { %>
-                            <form action="/panel/productos/activar/<%= p.id_producto %>" method="POST" style="display:inline;">
-                                <button style="background:green;color:white;">🔓 Activar</button>
-                            </form>
-                        <% } %>
-                    </td>
-
-                </tr>
-            <% }) %>
+                    <% } else { %>
+                        <form method="POST"
+                              action="/admin/productos/<%= p.id_producto %>/activar"
+                              style="display:inline;"
+                              onsubmit="return confirm('¿Seguro que deseas activar este producto?');">
+                            <button type="submit">Activar</button>
+                        </form>
+                    <% } %>
+                </td>
+            </tr>
+        <% }) %>
         </tbody>
     </table>
-
 </main>
-
 </body>
 </html>

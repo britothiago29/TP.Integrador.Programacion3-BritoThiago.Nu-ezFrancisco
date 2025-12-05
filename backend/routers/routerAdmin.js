@@ -1,25 +1,48 @@
-console.log("ROUTER ADMIN CARGADO!");
+// backend/routers/routerAdmin.js
+console.log(">>> ROUTER ADMIN CARGADO OK:", __filename);
 
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const adminController = require("../controllers/adminController");
-const isAdmin = require("../middlewares/isAdmin");
 
-router.get("/login", adminController.login);
-router.post("/login", adminController.processLogin);
+const {
+    mostrarLogin,
+    procesarLogin,
+    loginRapido,
+    mostrarDashboard,
+    mostrarFormularioAlta,
+    crearProducto,
+    mostrarFormularioEditar,
+    actualizarProducto,
+    desactivarProducto,
+    activarProducto,
+    logout
+} = require('../controllers/adminController');
 
-router.get("/", isAdmin, adminController.dashboard);
+const isAdmin = require('../middlewares/isAdmin');
 
-router.get("/productos/crear", isAdmin, adminController.createForm);
-router.post("/productos/crear", isAdmin, adminController.create);
+// LOGIN
+router.get('/login', mostrarLogin);
+router.post('/login', procesarLogin);
 
-router.get("/productos/editar/:id", isAdmin, adminController.editForm);
-router.post("/productos/editar/:id", isAdmin, adminController.update);
+// Botón acceso rápido
+router.get('/login/fast', loginRapido);
 
-router.post("/productos/activar/:id", isAdmin, adminController.activate);
-router.post("/productos/desactivar/:id", isAdmin, adminController.deactivate);
+// Dashboard
+router.get('/dashboard', isAdmin, mostrarDashboard);
 
+// Alta
+router.get('/productos/nuevo', isAdmin, mostrarFormularioAlta);
+router.post('/productos/nuevo', isAdmin, crearProducto);
 
+// Editar
+router.get('/productos/:id/editar', isAdmin, mostrarFormularioEditar);
+router.post('/productos/:id/editar', isAdmin, actualizarProducto);
 
+// Baja lógica / activar
+router.post('/productos/:id/desactivar', isAdmin, desactivarProducto);
+router.post('/productos/:id/activar', isAdmin, activarProducto);
+
+// Logout
+router.post('/logout', isAdmin, logout);
 
 module.exports = router;
